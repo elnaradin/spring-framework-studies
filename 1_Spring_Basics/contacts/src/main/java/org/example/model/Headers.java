@@ -1,5 +1,5 @@
 package org.example.model;
 
 public enum Headers {
-    fullName, phone, email
+    FULL_NAME, PHONE, EMAIL
 }

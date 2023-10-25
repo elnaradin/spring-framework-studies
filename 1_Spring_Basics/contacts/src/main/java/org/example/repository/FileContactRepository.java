@@ -63,16 +63,14 @@ public class FileContactRepository implements ContactRepository {
     @Override
     public List<Contact> getAllContacts() {
         List<Contact> contacts = new ArrayList<>();
-        try (Reader in = new FileReader(filePath, StandardCharsets.UTF_8);) {
+        try (Reader in = new FileReader(filePath, StandardCharsets.UTF_8)) {
             Iterable<CSVRecord> records = csvFormat.parse(in);
-            records.forEach(r -> {
-                contacts.add(Contact
-                        .builder()
-                        .fullName(r.get(Headers.fullName))
-                        .email(r.get(Headers.email))
-                        .phone(r.get(Headers.phone))
-                        .build());
-            });
+            records.forEach(r -> contacts.add(Contact
+                    .builder()
+                    .fullName(r.get(Headers.FULL_NAME))
+                    .email(r.get(Headers.EMAIL))
+                    .phone(r.get(Headers.PHONE))
+                    .build()));
         } catch (IOException e) {
             log.error(e.getMessage());
         }
