@@ -22,5 +22,5 @@ docker run -p 8888:8888 -e "sample-data.enabled=true" --rm -i student-recorder
 ### App commands
 - `ls` - lists all saved students
 - `rm <id>` - removes student by id
-- `save <first name> <last name> <age>` - saves contact
+- `add <first name> <last name> <age>` - saves contact
 - `cl` - cleans the whole list
