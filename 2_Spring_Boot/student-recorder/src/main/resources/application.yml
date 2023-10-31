@@ -1,0 +1,15 @@
+server:
+  host: ${SERVER_HOST}
+  port: ${SERVER_PORT}
+sample-data:
+  enabled: false
+  students:
+    - first-name: Misha
+      last-name: Petrov
+      age: 20
+    - first-name: Masha
+      last-name: Ivanova
+      age: 22
+    - first-name: Vasiliy
+      last-name: Stepanov
+      age: 21
