@@ -48,7 +48,8 @@ public class RecorderServiceImpl implements RecorderService {
 
     @Override
     public String getStudentList() {
-        return studentRepository.findAll().stream()
+        List<Student> students = studentRepository.findAll();
+        return students.isEmpty()? "List is empty" : students.stream()
                 .map(Student::toString)
                 .collect(Collectors.joining(System.lineSeparator()));
     }

@@ -7,22 +7,21 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class InMemoryStudentRepository implements StudentRepository {
-    private final AtomicInteger count = new AtomicInteger(0);
-    private final Map<Integer, Student> students = new ConcurrentSkipListMap<>();
+    private Integer count = 0;
+    private final Map<Integer, Student> students = new TreeMap<>();
 
     @Override
     public void saveAll(List<Student> students) {
         Map<Integer, Student> studentMap = students
                 .stream()
-                .peek(student -> student.setId(count.incrementAndGet()))
+                .peek(student -> student.setId(++count))
                 .collect(Collectors.toMap(Student::getId, student -> student));
         this.students.putAll(studentMap);
     }
@@ -33,8 +32,8 @@ public class InMemoryStudentRepository implements StudentRepository {
     }
 
     @Override
-    public synchronized void save(Student student) {
-        student.setId(count.incrementAndGet());
+    public void save(Student student) {
+        student.setId(++count);
         students.put(student.getId(), student);
     }
 
