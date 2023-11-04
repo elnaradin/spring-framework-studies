@@ -1,0 +1,18 @@
+version: '3'
+services:
+  psql:
+    image: postgres:15
+    ports:
+      - 5432:5432
+    container_name: psql
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=contacts_db
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - contactlist_default
+networks:
+  contactlist_default:
+    name: contactlist_default

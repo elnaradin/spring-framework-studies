@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact page</title>
+</head>
+<body>
+    <form  th:action="${contact.id == null} ?  '/contact/save' : '/contact/update' " method="post">
+        <input th:unless="${contact.id == null}" type="hidden" name="id" th:value="${contact.id}">
+        <div>
+            <label for="first_name">First name:</label>
+            <input type="text" id="first_name" required th:field="${contact.firstName}">
+        </div>
+        <div>
+            <label for="last_name">Last name:</label>
+            <input type="text" id="last_name"  required th:field="${contact.lastName}">
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="text" id="email" required th:field="${contact.email}">
+        </div>
+        <div>
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" required th:field="${contact.phone}">
+        </div>
+        <button th:unless="${contact.id == null}" type="submit">Update</button>
+        <button th:if="${contact.id == null}" type="submit">Save</button>
+    </form>
+    <form th:unless="${contact.id == null}" method="post" th:action="@{/contact/delete/{id}(id=*{id})}">
+        <button type="submit">Delete</button>
+    </form>
+</body>
+</html>
