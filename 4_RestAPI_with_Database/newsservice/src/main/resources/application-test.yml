@@ -1,0 +1,15 @@
+server:
+  host: localhost
+  port: 8888
+
+spring:
+  jpa:
+    generate-ddl: true
+    open-in-view: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/news_service_db
+    username: postgres
+    password: postgres
+    hikari:
+      schema: newsservice_schema
+      connection-timeout: 10000

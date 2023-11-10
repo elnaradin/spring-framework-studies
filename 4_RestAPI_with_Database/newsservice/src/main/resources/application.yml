@@ -13,3 +13,5 @@ spring:
     hikari:
       schema: newsservice_schema
       connection-timeout: 10000
+  profiles:
+    active: default
