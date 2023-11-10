@@ -1,0 +1,15 @@
+{
+  "newsList": [
+    {
+      "id": 1,
+      "authorName": "User 1",
+      "title": "Title 1",
+      "text": "Text 1",
+      "creationTime": "01-01-2000 00:00:00",
+      "commentCount": 1,
+      "categoryNames": [
+        "Category 1"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+server:
+  host: ${SERVER_HOST}
+  port: ${SERVER_PORT}
+
+spring:
+  jpa:
+    generate-ddl: true
+    open-in-view: false
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    hikari:
+      schema: newsservice_schema
+      connection-timeout: 10000
