@@ -4,10 +4,15 @@ import com.example.newsservice.model.Category;
 import com.example.newsservice.model.Comment;
 import com.example.newsservice.model.News;
 import com.example.newsservice.model.User;
+import com.example.newsservice.repository.CategoryRepository;
+import com.example.newsservice.repository.CommentRepository;
+import com.example.newsservice.repository.NewsRepository;
+import com.example.newsservice.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -22,6 +27,14 @@ public class AbstractTestController {
     protected MockMvc mockMvc;
     @Autowired
     protected ObjectMapper objectMapper;
+    @MockBean
+    protected NewsRepository newsRepository;
+    @MockBean
+    protected UserRepository userRepository;
+    @MockBean
+    protected CategoryRepository categoryRepository;
+    @MockBean
+    protected CommentRepository commentRepository;
     private final LocalDateTime someTime = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
 
     protected News createNews(Long id, User author, List<Category> categoryList) {

@@ -2,7 +2,7 @@
 
 1. Go to the root folder and create a jar file
 ```
-./gradlew clean build -x test
+./gradlew clean build
 ```
 2. Build a docker image
 ```

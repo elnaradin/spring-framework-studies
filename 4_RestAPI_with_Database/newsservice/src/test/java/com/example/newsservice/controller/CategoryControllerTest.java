@@ -5,11 +5,9 @@ import com.example.newsservice.StringTestUtils;
 import com.example.newsservice.dto.category.UpsertCategoryRequest;
 import com.example.newsservice.dto.user.UpsertUserRequest;
 import com.example.newsservice.model.Category;
-import com.example.newsservice.repository.CategoryRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
@@ -25,8 +23,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class CategoryControllerTest extends AbstractTestController {
-    @MockBean
-    private CategoryRepository categoryRepository;
     private Category category;
     private final String expectedResponse = StringTestUtils
             .readStringFromResource("response/category/single_object_response.json");

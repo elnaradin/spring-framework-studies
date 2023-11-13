@@ -6,13 +6,9 @@ import com.example.newsservice.dto.comment.InsertCommentRequest;
 import com.example.newsservice.model.Comment;
 import com.example.newsservice.model.News;
 import com.example.newsservice.model.User;
-import com.example.newsservice.repository.CommentRepository;
-import com.example.newsservice.repository.NewsRepository;
-import com.example.newsservice.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
 import java.util.ArrayList;
@@ -27,12 +23,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class CommentControllerTest extends AbstractTestController {
-    @MockBean
-    private CommentRepository commentRepository;
-    @MockBean
-    private UserRepository userRepository;
-    @MockBean
-    private NewsRepository newsRepository;
     private Comment comment;
     private User user;
     private News news;

@@ -8,15 +8,10 @@ import com.example.newsservice.model.Category;
 import com.example.newsservice.model.Comment;
 import com.example.newsservice.model.News;
 import com.example.newsservice.model.User;
-import com.example.newsservice.repository.CategoryRepository;
-import com.example.newsservice.repository.CommentRepository;
-import com.example.newsservice.repository.NewsRepository;
-import com.example.newsservice.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -33,14 +28,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class NewsControllerTest extends AbstractTestController {
-    @MockBean
-    private NewsRepository newsRepository;
-    @MockBean
-    private UserRepository userRepository;
-    @MockBean
-    private CategoryRepository categoryRepository;
-    @MockBean
-    private CommentRepository commentRepository;
     private User user;
     private Category category;
     private News news;
