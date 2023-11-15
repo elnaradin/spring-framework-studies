@@ -3,7 +3,7 @@ spring:
     generate-ddl: true
     open-in-view: false
   profiles:
-    active: dev
+    active: prod
 app:
   cache:
     cache-names:
