@@ -1,0 +1,7 @@
+app:
+  cache:
+    caches:
+      booksByTitleAndAuthor:
+        expiry: 10m
+      booksByCategory:
+        expiry: 10m

@@ -1,0 +1,35 @@
+version: '3'
+services:
+  redis:
+    container_name: redis
+    image: redis:7.0.12
+    ports:
+      - "6379:6379"
+  psql:
+    image: postgres:15
+    ports:
+      - 5432:5432
+    container_name: psql
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=bookservice_db
+  book-service:
+    image: book-service
+    ports:
+      - 8085:8085
+    container_name: book-service
+    environment:
+      - SERVER_HOST=localhost
+      - SERVER_PORT=8085
+      - DB_HOST=psql
+      - DB_PORT=5432
+      - DB_NAME=bookservice_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - REDIS_PORT=6379
+      - REDIS_HOST=redis
+      - BY_TITLE_AND_AUTHOR_CACHE_EXPIRY=10m
+      - BY_CATEGORY_CACHE_EXPIRY=10m
+    depends_on:
+      - psql

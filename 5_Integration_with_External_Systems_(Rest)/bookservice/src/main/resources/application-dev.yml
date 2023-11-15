@@ -1,0 +1,19 @@
+server:
+  host: localhost
+  port: 8085
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bookservice_db
+    username: postgres
+    password: postgres
+app:
+  cache:
+    caches:
+      booksByTitleAndAuthor:
+        expiry: 10m
+      booksByCategory:
+        expiry: 10m
