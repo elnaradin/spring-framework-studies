@@ -1,0 +1,9 @@
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
+
+app:
+  kafka:
+    orderStatusTopic: "order-status-topic"
+    orderTopic: "order-topic"
+    kafkaMessageGroupId: "kafka-message-groupId"
