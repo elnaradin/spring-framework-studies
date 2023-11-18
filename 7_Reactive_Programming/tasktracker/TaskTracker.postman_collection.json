@@ -1,0 +1,255 @@
+{
+	"info": {
+		"_postman_id": "27212315-b19f-45ea-bb1f-4d10ffa58824",
+		"name": "TaskTracker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "24909295"
+	},
+	"item": [
+		{
+			"name": "task",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"task 2\",\r\n    \"description\": \"description 2\",\r\n    \"status\": \"TODO\",\r\n    \"authorId\": \"6558f0962c6551074ad57adc\",\r\n    \"assigneeId\": \"6558f0a32c6551074ad57add\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://{{host}}:{{port}}/api/v1/task"
+					},
+					"response": []
+				},
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://{{host}}:{{port}}/api/v1/task"
+					},
+					"response": []
+				},
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://{{host}}:{{port}}/api/v1/task/6558a0854620681df4188b0d"
+					},
+					"response": []
+				},
+				{
+					"name": "update task",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"task 1 updated third time\"\r\n\r\n}"
+						},
+						"url": "http://{{host}}:{{port}}/api/v1/task/6558f0bb2c6551074ad57ade"
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://{{host}}:{{port}}/api/v1/task/"
+					},
+					"response": []
+				},
+				{
+					"name": "addObserver",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/task/addObserver?taskId=6558f0bb2c6551074ad57ade&observerId=65590da70d0c8764eed24c91",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"addObserver"
+							],
+							"query": [
+								{
+									"key": "taskId",
+									"value": "6558f0bb2c6551074ad57ade"
+								},
+								{
+									"key": "observerId",
+									"value": "65590da70d0c8764eed24c91"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "removeObserver",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/task/removeObserver?taskId=6558f0bb2c6551074ad57ade&observerId=6558f0962c6551074ad57adc",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"removeObserver"
+							],
+							"query": [
+								{
+									"key": "taskId",
+									"value": "6558f0bb2c6551074ad57ade"
+								},
+								{
+									"key": "observerId",
+									"value": "6558f0962c6551074ad57adc"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"some observer\",\r\n    \"email\": \"someEmail@email\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://{{host}}:{{port}}/api/v1/user"
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"user updated\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://{{host}}:{{port}}/api/v1/user/6558f0962c6551074ad57adc"
+					},
+					"response": []
+				},
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://{{host}}:{{port}}/api/v1/user"
+					},
+					"response": []
+				},
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://{{host}}:{{port}}/api/v1/user/6558ce749a56a258d6c605f2"
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://{{host}}:{{port}}/api/v1/user/6558ce0c9a56a258d6c605f1"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "taskBaseUri",
+			"value": "http://localhost:8080/api/v1/task",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "userBaseUri",
+			"value": "http://localhost:8080/api/v1/user",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "host",
+			"value": "localhost",
+			"type": "string"
+		},
+		{
+			"key": "port",
+			"value": "8080",
+			"type": "string"
+		}
+	]
+}
