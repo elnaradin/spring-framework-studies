@@ -1,1 +1,0 @@
-CREATE SCHEMA IF NOT EXISTS bookservice_schema;
