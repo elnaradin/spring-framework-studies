@@ -8,9 +8,9 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpsertUserRequest {
-    @NotBlank
+    @NotBlank(message = "{requirements.name}")
     private String userName;
-    @NotBlank
-    @Email
+    @NotBlank(message = "{requirements.email}")
+    @Email(message = "{requirements.emailFormat}")
     private String email;
 }

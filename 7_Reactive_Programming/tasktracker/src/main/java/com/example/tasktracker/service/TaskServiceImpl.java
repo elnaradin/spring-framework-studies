@@ -46,11 +46,11 @@ public class TaskServiceImpl implements TaskService {
         Mono<Task> taskMono = Mono.just(taskMapper.requestToTask(request));
         Mono<User> authorMono = userRepository.findById(request.getAuthorId())
                 .switchIfEmpty(Mono.error(new EntityNotFoundException(
-                        "Author not found when updating/creating task with id:" + request.getAuthorId()
+                        "Author not found when creating task with id:" + request.getAuthorId()
                 )));
         Mono<User> assigneeMono = userRepository.findById(request.getAuthorId())
                 .switchIfEmpty(Mono.error(new EntityNotFoundException(
-                        "Assignee not found when updating/creating task with id:" + request.getAuthorId()
+                        "Assignee not found when creating task with id:" + request.getAuthorId()
                 )));
         return taskMono
                 .zipWith(authorMono, (task, author) -> {

@@ -11,13 +11,13 @@ import lombok.Data;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpsertTaskRequest {
-    @NotBlank
+    @NotBlank(message = "{requirements.name}")
     private String name;
     private String description;
-    @NotNull
+    @NotNull(message = "{requirements.status}")
     private TaskStatus status;
-    @NotBlank
+    @NotBlank(message = "{requirements.authorId}")
     private String authorId;
-    @NotBlank
+    @NotBlank(message = "{requirements.assigneeId}")
     private String assigneeId;
 }
