@@ -7,12 +7,15 @@ import com.example.newsservice.dto.news.UpsertNewsRequest;
 import com.example.newsservice.model.News;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 @DecoratedWith(NewsMapperDecorator.class)
 public interface NewsMapper {
 
@@ -20,11 +23,11 @@ public interface NewsMapper {
 
     News requestToNews(UpsertNewsRequest request);
 
-    News requestToNews(Long id, UpsertNewsRequest request);
-
     MultipleNewsResponse newsToMultipleResponse(News news);
 
     List<MultipleNewsResponse> newsToMultipleResponse(List<News> news);
+
+    void update(Long id, UpsertNewsRequest request, @MappingTarget News news);
 
     default NewsListResponse newsListToListResponse(Page<News> newsPage) {
         List<MultipleNewsResponse> newsWithCommentsResponse = newsToMultipleResponse(newsPage.getContent());

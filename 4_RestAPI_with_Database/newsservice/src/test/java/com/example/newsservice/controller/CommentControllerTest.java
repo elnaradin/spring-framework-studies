@@ -2,7 +2,7 @@ package com.example.newsservice.controller;
 
 import com.example.newsservice.AbstractTestController;
 import com.example.newsservice.StringTestUtils;
-import com.example.newsservice.dto.comment.InsertCommentRequest;
+import com.example.newsservice.dto.comment.CreateCommentRequest;
 import com.example.newsservice.model.Comment;
 import com.example.newsservice.model.News;
 import com.example.newsservice.model.User;
@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class CommentControllerTest extends AbstractTestController {
     private Comment comment;
     private User user;
     private News news;
-    private InsertCommentRequest request;
+    private CreateCommentRequest request;
     private final String expectedResponse = StringTestUtils
             .readStringFromResource("response/comment/single_object_response.json");
     private final String expectedResponse2 = StringTestUtils
@@ -36,7 +37,7 @@ public class CommentControllerTest extends AbstractTestController {
     void setUp() {
         user = createUser(1L);
         comment = createComment(1L, user);
-        request = new InsertCommentRequest("Text 1", 1L, 1L);
+        request = new CreateCommentRequest("Text 1", 1L, 1L);
         news = createNews(1L, user, new ArrayList<>());
     }
 
@@ -77,7 +78,7 @@ public class CommentControllerTest extends AbstractTestController {
 
     @Test
     public void update() throws Exception {
-        when(userRepository.existsByIdAndCommentsId(anyLong(), anyLong())).thenReturn(true);
+        when(userRepository.existsByNameAndCommentsId(anyString(), anyLong())).thenReturn(true);
         when(commentRepository.findById(anyLong())).thenReturn(Optional.of(comment));
         when(commentRepository.save(any(Comment.class))).thenReturn(comment);
         String actualResponse = mockMvc
@@ -95,8 +96,9 @@ public class CommentControllerTest extends AbstractTestController {
     }
 
     @Test
+    @WithMockUser()
     public void updateFail() throws Exception {
-        when(userRepository.existsByIdAndCommentsId(anyLong(), anyLong())).thenReturn(false);
+        when(userRepository.existsByNameAndCommentsId(anyString(), anyLong())).thenReturn(false);
         mockMvc
                 .perform(put("/api/v1/comment/1")
                         .param("userId", "1")
@@ -131,7 +133,7 @@ public class CommentControllerTest extends AbstractTestController {
 
     @Test
     void deleteById() throws Exception {
-        when(userRepository.existsByIdAndCommentsId(anyLong(), anyLong())).thenReturn(true);
+        when(userRepository.existsByNameAndCommentsId(anyString(), anyLong())).thenReturn(true);
         mockMvc
                 .perform(delete("/api/v1/comment/1")
                         .param("userId", "1"))
@@ -140,8 +142,9 @@ public class CommentControllerTest extends AbstractTestController {
     }
 
     @Test
+    @WithMockUser()
     void deleteByIdFail() throws Exception {
-        when(userRepository.existsByIdAndCommentsId(anyLong(), anyLong())).thenReturn(false);
+        when(userRepository.existsByNameAndCommentsId(anyString(), anyLong())).thenReturn(false);
         mockMvc
                 .perform(delete("/api/v1/comment/1")
                         .param("userId", "1"))

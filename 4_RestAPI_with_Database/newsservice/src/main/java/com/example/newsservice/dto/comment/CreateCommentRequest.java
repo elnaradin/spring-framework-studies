@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InsertCommentRequest {
+public class CreateCommentRequest {
     @NotBlank(message = "{requirements.comment.text}")
     private String text;
     @NotNull(message = "{requirements.comment.userId}")

@@ -12,7 +12,6 @@ import com.example.newsservice.repository.NewsRepository;
 import com.example.newsservice.repository.NewsSpecification;
 import com.example.newsservice.repository.UserRepository;
 import com.example.newsservice.service.NewsService;
-import com.example.newsservice.utils.BeanUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -47,11 +46,13 @@ public class NewsServiceImpl implements NewsService {
 
     @Transactional
     @Override
-    public SingleNewsResponse save(UpsertNewsRequest request) {
+    public SingleNewsResponse create(UpsertNewsRequest request) {
         News news = newsMapper.requestToNews(request);
         if (request.getAuthorId() != null) {
             news.setAuthor(userRepository.findById(request.getAuthorId())
-                    .orElseThrow(() -> new EntityNotFoundException("Author not found when creating news. ID: " + request.getAuthorId())));
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Author not found when creating news. ID: " + request.getAuthorId()
+                    )));
         }
         if (request.getCategoryIds() != null && !request.getCategoryIds().isEmpty()) {
             news.setCategories(categoryRepository.findAllById(request.getCategoryIds()));
@@ -62,18 +63,20 @@ public class NewsServiceImpl implements NewsService {
     @Transactional
     @Override
     public SingleNewsResponse update(Long id, UpsertNewsRequest request) {
-        News source = newsMapper.requestToNews(id, request);
+
+        News news = newsRepository
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("News not found when updating. ID: " + id));
+        newsMapper.update(id, request, news);
         if (request.getAuthorId() != null) {
-            source.setAuthor(userRepository.findById(request.getAuthorId())
-                    .orElseThrow(() -> new EntityNotFoundException("Author not found when updating news. ID: " + request.getAuthorId())));
+            news.setAuthor(userRepository.findById(request.getAuthorId())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Author not found when updating news. ID: " + request.getAuthorId()
+                    )));
         }
         if (request.getCategoryIds() != null && !request.getCategoryIds().isEmpty()) {
-            source.setCategories(categoryRepository.findAllById(request.getCategoryIds()));
+            news.setCategories(categoryRepository.findAllById(request.getCategoryIds()));
         }
-        News news = newsRepository
-                .findById(source.getId())
-                .orElseThrow(() -> new EntityNotFoundException("News not found when updating. ID: " + source.getId()));
-        BeanUtils.copyNonNullProperties(source, news);
         return newsMapper.newsToSingleResponse(newsRepository.save(news));
     }
 

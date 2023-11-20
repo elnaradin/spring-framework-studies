@@ -14,4 +14,4 @@ spring:
       schema: newsservice_schema
       connection-timeout: 10000
   profiles:
-    active: dev
+    active: default

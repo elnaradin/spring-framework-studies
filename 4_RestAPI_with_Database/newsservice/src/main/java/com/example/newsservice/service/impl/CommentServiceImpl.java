@@ -1,7 +1,7 @@
 package com.example.newsservice.service.impl;
 
 import com.example.newsservice.dto.comment.CommentResponse;
-import com.example.newsservice.dto.comment.InsertCommentRequest;
+import com.example.newsservice.dto.comment.CreateCommentRequest;
 import com.example.newsservice.dto.comment.UpdateCommentRequest;
 import com.example.newsservice.exception.EntityNotFoundException;
 import com.example.newsservice.mapper.CommentMapper;
@@ -10,7 +10,6 @@ import com.example.newsservice.repository.CommentRepository;
 import com.example.newsservice.repository.NewsRepository;
 import com.example.newsservice.repository.UserRepository;
 import com.example.newsservice.service.CommentService;
-import com.example.newsservice.utils.BeanUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,23 +33,26 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public CommentResponse save(InsertCommentRequest request) {
+    public CommentResponse create(CreateCommentRequest request) {
         Comment comment = commentMapper.requestToComment(request);
         comment.setNews(newsRepository.findById(request.getNewsId())
-                .orElseThrow(() -> new EntityNotFoundException("News not found when creating comment. ID: " + request.getNewsId())));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "News not found when creating comment. ID: " + request.getNewsId()
+                )));
         comment.setUser(userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found when creating comment. ID: " + request.getNewsId())));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "User not found when creating comment. ID: " + request.getNewsId()
+                )));
         return commentMapper.commentToResponse(commentRepository.save(comment));
     }
 
     @Transactional
     @Override
-    public CommentResponse update(String id, UpdateCommentRequest request) {
-        Comment source = commentMapper.requestToComment(id, request);
+    public CommentResponse update(Long id, UpdateCommentRequest request) {
         Comment comment = commentRepository
-                .findById(source.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Comment not found when updating. ID: " + source.getId()));
-        BeanUtils.copyNonNullProperties(source, comment);
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found when updating. ID: " + id));
+        commentMapper.update(id, request, comment);
         return commentMapper.commentToResponse(commentRepository.save(comment));
     }
 

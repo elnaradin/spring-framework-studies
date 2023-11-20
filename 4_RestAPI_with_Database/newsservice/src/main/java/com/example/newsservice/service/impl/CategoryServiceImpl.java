@@ -8,7 +8,6 @@ import com.example.newsservice.mapper.CategoryMapper;
 import com.example.newsservice.model.Category;
 import com.example.newsservice.repository.CategoryRepository;
 import com.example.newsservice.service.CategoryService;
-import com.example.newsservice.utils.BeanUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,30 +37,24 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponse save(UpsertCategoryRequest request) {
+    public CategoryResponse create(UpsertCategoryRequest request) {
         Category category = categoryMapper.requestToCategory(request);
         return categoryMapper.categoryToResponse(categoryRepository.save(category));
     }
 
     @Transactional
     @Override
-    public CategoryResponse update(String id, UpsertCategoryRequest request) {
-        Category source = categoryMapper.requestToCategory(id, request);
+    public CategoryResponse update(Long id, UpsertCategoryRequest request) {
         Category category = categoryRepository
-                .findById(source.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Category not found when updating. ID: " + source.getId()));
-        BeanUtils.copyNonNullProperties(source, category);
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found when updating. ID: " + id));
+        categoryMapper.update(id, request, category);
         return categoryMapper.categoryToResponse(categoryRepository.save(category));
     }
 
     @Override
     public void deleteById(Long id) {
         categoryRepository.deleteById(id);
-    }
-
-    @Override
-    public List<Category> findByIdsIn(List<Long> categoryIds) {
-        return categoryRepository.findAllById(categoryIds);
     }
 
     @Override

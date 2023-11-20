@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.List;
 import java.util.Optional;
@@ -105,7 +106,7 @@ public class NewsControllerTest extends AbstractTestController {
 
     @Test
     public void update() throws Exception {
-        when(userRepository.existsByIdAndNewsListId(anyLong(), anyLong())).thenReturn(true);
+        when(userRepository.existsByNameAndNewsListId(anyString(), anyLong())).thenReturn(true);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(newsRepository.findById(anyLong())).thenReturn(Optional.of(news));
         when(newsRepository.save(any(News.class))).thenReturn(news);
@@ -128,8 +129,9 @@ public class NewsControllerTest extends AbstractTestController {
     }
 
     @Test
+    @WithMockUser()
     public void updateFail() throws Exception {
-        when(userRepository.existsByIdAndNewsListId(anyLong(), anyLong())).thenReturn(false);
+        when(userRepository.existsByNameAndNewsListId(anyString(), anyLong())).thenReturn(false);
         mockMvc
                 .perform(put("/api/v1/news/1")
                         .param("userId", "1")
@@ -170,7 +172,7 @@ public class NewsControllerTest extends AbstractTestController {
 
     @Test
     void deleteById() throws Exception {
-        when(userRepository.existsByIdAndNewsListId(anyLong(), anyLong())).thenReturn(true);
+        when(userRepository.existsByNameAndNewsListId(anyString(), anyLong())).thenReturn(true);
         mockMvc
                 .perform(delete("/api/v1/news/1")
                         .param("userId", "1"))
@@ -179,8 +181,9 @@ public class NewsControllerTest extends AbstractTestController {
     }
 
     @Test
+    @WithMockUser()
     void deleteByIdFail() throws Exception {
-        when(userRepository.existsByIdAndNewsListId(anyLong(), anyLong())).thenReturn(false);
+        when(userRepository.existsByNameAndNewsListId(anyString(), anyLong())).thenReturn(false);
         mockMvc
                 .perform(delete("/api/v1/news/1")
                         .param("userId", "1"))

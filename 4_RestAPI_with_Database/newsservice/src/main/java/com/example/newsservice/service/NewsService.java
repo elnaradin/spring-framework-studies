@@ -10,7 +10,7 @@ public interface NewsService {
 
     SingleNewsResponse findById(Long id);
 
-    SingleNewsResponse save(UpsertNewsRequest news);
+    SingleNewsResponse create(UpsertNewsRequest news);
 
     SingleNewsResponse update(Long id, UpsertNewsRequest request);
 

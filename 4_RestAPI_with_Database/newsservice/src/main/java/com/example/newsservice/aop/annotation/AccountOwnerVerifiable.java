@@ -1,4 +1,4 @@
-package com.example.newsservice.aspect;
+package com.example.newsservice.aop.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,5 +7,5 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UserVerifiable {
+public @interface AccountOwnerVerifiable {
 }

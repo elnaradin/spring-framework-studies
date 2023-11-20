@@ -3,7 +3,8 @@ package com.example.newsservice.controller;
 
 import com.example.newsservice.AbstractTestController;
 import com.example.newsservice.StringTestUtils;
-import com.example.newsservice.dto.user.UpsertUserRequest;
+import com.example.newsservice.dto.user.CreateUserRequest;
+import com.example.newsservice.model.RoleType;
 import com.example.newsservice.model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,7 +72,7 @@ public class UserControllerTest extends AbstractTestController {
 
     @Test
     public void update() throws Exception {
-        UpsertUserRequest request = new UpsertUserRequest("User 1");
+        CreateUserRequest request = CreateUserRequest.builder().name("User 1").build();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
         String actualResponse = mockMvc
@@ -90,7 +91,7 @@ public class UserControllerTest extends AbstractTestController {
 
     @Test
     void create() throws Exception {
-        UpsertUserRequest request = new UpsertUserRequest("User 1");
+        CreateUserRequest request = new CreateUserRequest("User 1", "pass", List.of(RoleType.ROLE_USER));
         when(userRepository.save(any(User.class))).thenReturn(user);
         String actualResponse = mockMvc
                 .perform(post("/api/v1/user")

@@ -1,6 +1,9 @@
-package com.example.newsservice.exception;
+package com.example.newsservice.controller;
 
 import com.example.newsservice.dto.ErrorResponse;
+import com.example.newsservice.exception.DuplicateEntryException;
+import com.example.newsservice.exception.EntityNotFoundException;
+import com.example.newsservice.exception.UserNotAuthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -14,7 +17,7 @@ import java.util.List;
 
 @RestControllerAdvice
 @Slf4j
-public class ExceptionHandlerController {
+public class ExceptionHandlerControllerAdvice {
 
     @ExceptionHandler(UserNotAuthorizedException.class)
     public ResponseEntity<ErrorResponse> notAuthorized(UserNotAuthorizedException ex) {
@@ -41,5 +44,10 @@ public class ExceptionHandlerController {
         log.warn(message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(message));
+    }
+
+    @ExceptionHandler(DuplicateEntryException.class)
+    public ResponseEntity<ErrorResponse> duplicateEntry(DuplicateEntryException ex) {
+        return ResponseEntity.badRequest().body(new ErrorResponse(ex.getMessage()));
     }
 }

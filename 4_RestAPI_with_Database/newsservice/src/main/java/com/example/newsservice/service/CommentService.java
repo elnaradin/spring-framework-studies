@@ -1,7 +1,7 @@
 package com.example.newsservice.service;
 
 import com.example.newsservice.dto.comment.CommentResponse;
-import com.example.newsservice.dto.comment.InsertCommentRequest;
+import com.example.newsservice.dto.comment.CreateCommentRequest;
 import com.example.newsservice.dto.comment.UpdateCommentRequest;
 import com.example.newsservice.model.Comment;
 import org.springframework.data.domain.Pageable;
@@ -13,9 +13,9 @@ public interface CommentService {
 
     List<CommentResponse> findByNewsId(Long id);
 
-    CommentResponse save(InsertCommentRequest comment);
+    CommentResponse create(CreateCommentRequest comment);
 
-    CommentResponse update(String id, UpdateCommentRequest request);
+    CommentResponse update(Long id, UpdateCommentRequest request);
 
     void deleteById(Long id);
 

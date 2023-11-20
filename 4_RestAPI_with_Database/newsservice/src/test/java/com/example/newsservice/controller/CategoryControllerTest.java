@@ -3,7 +3,6 @@ package com.example.newsservice.controller;
 import com.example.newsservice.AbstractTestController;
 import com.example.newsservice.StringTestUtils;
 import com.example.newsservice.dto.category.UpsertCategoryRequest;
-import com.example.newsservice.dto.user.UpsertUserRequest;
 import com.example.newsservice.model.Category;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -89,7 +88,7 @@ public class CategoryControllerTest extends AbstractTestController {
 
     @Test
     void create() throws Exception {
-        UpsertUserRequest request = new UpsertUserRequest("Category 1");
+        UpsertCategoryRequest request = new UpsertCategoryRequest("Category 1");
         when(categoryRepository.save(any(Category.class))).thenReturn(category);
         String actualResponse = mockMvc
                 .perform(post("/api/v1/category")
