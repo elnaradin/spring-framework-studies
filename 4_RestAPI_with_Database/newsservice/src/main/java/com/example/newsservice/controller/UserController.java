@@ -4,8 +4,6 @@ import com.example.newsservice.dto.ErrorResponse;
 import com.example.newsservice.dto.user.UpsertUserRequest;
 import com.example.newsservice.dto.user.UserListResponse;
 import com.example.newsservice.dto.user.UserResponse;
-import com.example.newsservice.mapper.UserMapper;
-import com.example.newsservice.model.User;
 import com.example.newsservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -34,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "User V1", description = "User API version V1")
 public class UserController {
     private final UserService userService;
-    private final UserMapper userMapper;
 
 
     @Operation(summary = "Get all users", tags = {"get all"})
@@ -56,7 +53,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<UserListResponse> findAll(@RequestParam Integer pageNumber,
                                                     @RequestParam Integer pageSize) {
-        return ResponseEntity.ok(userMapper.userListToListResponse(userService.findAll(PageRequest.of(pageNumber, pageSize))));
+        return ResponseEntity.ok((userService.findAll(PageRequest.of(pageNumber, pageSize))));
     }
 
 
@@ -71,7 +68,7 @@ public class UserController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(userMapper.userToResponse(userService.findById(id)));
+        return ResponseEntity.ok(userService.findById(id));
     }
 
 
@@ -89,10 +86,9 @@ public class UserController {
     })
     @PostMapping
     public ResponseEntity<UserResponse> create(@Valid @RequestBody UpsertUserRequest request) {
-        User user = userService.save(userMapper.requestToUser(request));
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(userMapper.userToResponse(user));
+                .body(userService.save(request));
     }
 
 
@@ -112,8 +108,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> update(@PathVariable String id,
                                                @Valid @RequestBody UpsertUserRequest request) {
-        User updatedUser = userService.update(userMapper.requestToUser(id, request));
-        return ResponseEntity.ok(userMapper.userToResponse(updatedUser));
+        return ResponseEntity.ok(userService.update(id, request));
     }
 
 

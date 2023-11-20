@@ -1,18 +1,18 @@
 package com.example.newsservice.service;
 
 import com.example.newsservice.dto.NewsFilter;
-import com.example.newsservice.model.News;
-
-import java.util.List;
+import com.example.newsservice.dto.news.NewsListResponse;
+import com.example.newsservice.dto.news.SingleNewsResponse;
+import com.example.newsservice.dto.news.UpsertNewsRequest;
 
 public interface NewsService {
-    List<News> findAll(NewsFilter newsFilter);
+    NewsListResponse findAll(NewsFilter newsFilter);
 
-    News findById(Long id);
+    SingleNewsResponse findById(Long id);
 
-    News save(News news);
+    SingleNewsResponse save(UpsertNewsRequest news);
 
-    News update(News news);
+    SingleNewsResponse update(Long id, UpsertNewsRequest request);
 
     void deleteById(Long id);
 }

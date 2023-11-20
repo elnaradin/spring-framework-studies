@@ -5,7 +5,6 @@ import com.example.newsservice.dto.comment.CommentResponse;
 import com.example.newsservice.dto.comment.InsertCommentRequest;
 import com.example.newsservice.dto.comment.UpdateCommentRequest;
 import com.example.newsservice.model.Comment;
-import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -13,7 +12,6 @@ import org.mapstruct.ReportingPolicy;
 import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-@DecoratedWith(CommentMapperDecorator.class)
 public interface CommentMapper {
 
     @Mapping(source = "user.name", target = "authorName")

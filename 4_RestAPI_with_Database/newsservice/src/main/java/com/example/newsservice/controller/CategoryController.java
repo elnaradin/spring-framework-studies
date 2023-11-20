@@ -4,8 +4,6 @@ import com.example.newsservice.dto.ErrorResponse;
 import com.example.newsservice.dto.category.CategoryListResponse;
 import com.example.newsservice.dto.category.CategoryResponse;
 import com.example.newsservice.dto.category.UpsertCategoryRequest;
-import com.example.newsservice.mapper.CategoryMapper;
-import com.example.newsservice.model.Category;
 import com.example.newsservice.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,15 +26,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/category")
 @Tag(name = "Category V1", description = "Category API version V1")
 public class CategoryController {
     private final CategoryService categoryService;
-    private final CategoryMapper categoryMapper;
+
 
     @Operation(summary = "Get all categories", tags = {"get all"})
     @ApiResponses({
@@ -50,8 +46,7 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<CategoryListResponse> findAll(@RequestParam Integer pageNumber,
                                                         @RequestParam Integer pageSize) {
-        List<Category> categories = categoryService.findAll(PageRequest.of(pageNumber, pageSize));
-        return ResponseEntity.ok(categoryMapper.categoryListToListResponse(categories));
+        return ResponseEntity.ok(categoryService.findAll(PageRequest.of(pageNumber, pageSize)));
     }
 
     @Operation(summary = "Get category by ID", tags = {"get by id"})
@@ -65,7 +60,7 @@ public class CategoryController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponse> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(categoryMapper.categoryToResponse(categoryService.findById(id)));
+        return ResponseEntity.ok(categoryService.findById(id));
     }
 
     @Operation(summary = "Create category", tags = {"create"})
@@ -82,8 +77,7 @@ public class CategoryController {
     })
     @PostMapping
     public ResponseEntity<CategoryResponse> create(@Valid @RequestBody UpsertCategoryRequest request) {
-        Category category = categoryService.save(categoryMapper.requestToCategory(request));
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryMapper.categoryToResponse(category));
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.save(request));
     }
 
     @Operation(summary = "Update category by ID", tags = {"update"})
@@ -100,8 +94,7 @@ public class CategoryController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<CategoryResponse> update(@PathVariable String id, @Valid @RequestBody UpsertCategoryRequest request) {
-        Category updatedCategory = categoryService.update(categoryMapper.requestToCategory(id, request));
-        return ResponseEntity.ok(categoryMapper.categoryToResponse(updatedCategory));
+        return ResponseEntity.ok(categoryService.update(id, request));
     }
 
     @Operation(summary = "Delete category by ID", tags = {"delete"})

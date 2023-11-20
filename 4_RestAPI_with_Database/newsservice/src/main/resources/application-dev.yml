@@ -1,0 +1,9 @@
+server:
+  host: localhost
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/news_service_db
+    username: postgres
+    password: postgres

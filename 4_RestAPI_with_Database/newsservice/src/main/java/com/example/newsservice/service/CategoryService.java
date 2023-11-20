@@ -1,24 +1,27 @@
 package com.example.newsservice.service;
 
+import com.example.newsservice.dto.category.CategoryListResponse;
+import com.example.newsservice.dto.category.CategoryResponse;
+import com.example.newsservice.dto.category.UpsertCategoryRequest;
 import com.example.newsservice.model.Category;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
 public interface CategoryService {
-    List<Category> findAll(PageRequest of);
+    CategoryListResponse findAll(PageRequest of);
 
-    Category findById(Long id);
+    CategoryResponse findById(Long id);
 
-    Category save(Category category);
+    CategoryResponse save(UpsertCategoryRequest category);
 
-    Category update(Category category);
+    CategoryResponse update(String id, UpsertCategoryRequest request);
 
     void deleteById(Long id);
 
     List<Category> findByIdsIn(List<Long> categoryIds);
 
-    List<Category> findByNewsId(Long id);
+    List<CategoryResponse> findByNewsId(Long id);
 
     List<String> getNamesByNewsId(Long id);
 }

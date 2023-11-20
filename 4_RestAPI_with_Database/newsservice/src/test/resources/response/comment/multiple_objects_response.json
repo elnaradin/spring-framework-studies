@@ -1,5 +1,4 @@
-{
-  "comments": [
+ [
     {
       "id": 1,
       "authorName": "User 1",
@@ -7,4 +6,3 @@
       "creationTime": "01-01-2000 00:00:00"
     }
   ]
-}

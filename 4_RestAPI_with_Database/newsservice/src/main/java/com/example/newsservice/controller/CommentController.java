@@ -6,10 +6,9 @@ import com.example.newsservice.dto.comment.CommentListResponse;
 import com.example.newsservice.dto.comment.CommentResponse;
 import com.example.newsservice.dto.comment.InsertCommentRequest;
 import com.example.newsservice.dto.comment.UpdateCommentRequest;
-import com.example.newsservice.mapper.CommentMapper;
-import com.example.newsservice.model.Comment;
 import com.example.newsservice.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,27 +28,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/comment")
 @Tag(name = "Comment V1", description = "Comment API version V1")
 public class CommentController {
     private final CommentService commentService;
-    private final CommentMapper commentMapper;
 
 
     @Operation(summary = "Get all comments by news ID", tags = {"get all"})
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    content = {@Content(schema = @Schema(implementation = CommentListResponse.class), mediaType = "application/json")}),
+                    content = {@Content(array = @ArraySchema(schema = @Schema(implementation = CommentListResponse.class)), mediaType = "application/json")}),
             @ApiResponse(
                     responseCode = "404",
                     content = {@Content(schema = @Schema(implementation = ErrorResponse.class), mediaType = "application/json")})
     })
     @GetMapping("/byNews/{newsId}")
-    public ResponseEntity<CommentListResponse> findAllByNewsId(@PathVariable Long newsId) {
-        return ResponseEntity.ok(commentMapper.commentListToListResponse(commentService.findByNewsId(newsId)));
+    public ResponseEntity<List<CommentResponse>> findAllByNewsId(@PathVariable Long newsId) {
+        return ResponseEntity.ok(commentService.findByNewsId(newsId));
     }
 
 
@@ -64,7 +64,7 @@ public class CommentController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<CommentResponse> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(commentMapper.commentToResponse(commentService.findById(id)));
+        return ResponseEntity.ok(commentService.findById(id));
     }
 
 
@@ -85,10 +85,9 @@ public class CommentController {
     })
     @PostMapping
     public ResponseEntity<CommentResponse> create(@Valid @RequestBody InsertCommentRequest request) {
-        Comment comment = commentService.save(commentMapper.requestToComment(request));
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(commentMapper.commentToResponse(comment));
+                .body(commentService.save(request));
     }
 
 
@@ -109,8 +108,7 @@ public class CommentController {
     public ResponseEntity<CommentResponse> update(@PathVariable String id,
                                                   @Valid @RequestBody UpdateCommentRequest request,
                                                   @RequestParam Long userId) {
-        Comment updatedComment = commentService.update(commentMapper.requestToComment(id, request));
-        return ResponseEntity.ok(commentMapper.commentToResponse(updatedComment));
+        return ResponseEntity.ok(commentService.update(id, request));
     }
 
     @Operation(summary = "Delete comment by ID", tags = {"delete"})

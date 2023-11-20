@@ -10,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryListResponse {
+    private Long count;
     private List<CategoryResponse> categories;
 
 

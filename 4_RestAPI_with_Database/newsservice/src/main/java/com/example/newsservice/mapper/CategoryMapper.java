@@ -7,6 +7,7 @@ import com.example.newsservice.dto.category.UpsertCategoryRequest;
 import com.example.newsservice.model.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -20,9 +21,9 @@ public interface CategoryMapper {
 
     List<CategoryResponse> categoryToResponse(List<Category> categories);
 
-    default CategoryListResponse categoryListToListResponse(List<Category> categories) {
-        List<CategoryResponse> categoryResponses = categoryToResponse(categories);
-        return new CategoryListResponse(categoryResponses);
+    default CategoryListResponse categoryListToListResponse(Page<Category> categories) {
+        List<CategoryResponse> categoryResponses = categoryToResponse(categories.getContent());
+        return new CategoryListResponse(categories.getTotalElements(), categoryResponses);
     }
 
 }

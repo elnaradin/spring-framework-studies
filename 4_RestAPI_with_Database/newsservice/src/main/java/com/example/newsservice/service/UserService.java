@@ -1,21 +1,21 @@
 package com.example.newsservice.service;
 
 
-import com.example.newsservice.model.User;
+import com.example.newsservice.dto.user.UpsertUserRequest;
+import com.example.newsservice.dto.user.UserListResponse;
+import com.example.newsservice.dto.user.UserResponse;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.List;
-
 public interface UserService {
-    User findById(Long id);
+    UserResponse findById(Long id);
 
-    User save(User user);
+    UserResponse save(UpsertUserRequest user);
 
-    List<User> findAll(PageRequest of);
+    UserListResponse findAll(PageRequest of);
 
     void deleteById(Long id);
 
-    User update(User user);
+    UserResponse update(String id, UpsertUserRequest request);
 
     boolean existsByUserAndNews(Long userId, Long newsId);
 

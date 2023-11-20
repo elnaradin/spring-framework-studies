@@ -10,5 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NewsListResponse {
+    private Long count;
     private List<MultipleNewsResponse> newsList;
 }

@@ -8,6 +8,7 @@ import com.example.newsservice.model.News;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -25,8 +26,8 @@ public interface NewsMapper {
 
     List<MultipleNewsResponse> newsToMultipleResponse(List<News> news);
 
-    default NewsListResponse newsListToListResponse(List<News> news) {
-        List<MultipleNewsResponse> newsWithCommentsResponse = newsToMultipleResponse(news);
-        return new NewsListResponse(newsWithCommentsResponse);
+    default NewsListResponse newsListToListResponse(Page<News> newsPage) {
+        List<MultipleNewsResponse> newsWithCommentsResponse = newsToMultipleResponse(newsPage.getContent());
+        return new NewsListResponse(newsPage.getTotalElements(), newsWithCommentsResponse);
     }
 }

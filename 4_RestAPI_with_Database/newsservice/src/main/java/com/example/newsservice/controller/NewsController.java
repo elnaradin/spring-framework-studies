@@ -6,8 +6,6 @@ import com.example.newsservice.dto.NewsFilter;
 import com.example.newsservice.dto.news.NewsListResponse;
 import com.example.newsservice.dto.news.SingleNewsResponse;
 import com.example.newsservice.dto.news.UpsertNewsRequest;
-import com.example.newsservice.mapper.NewsMapper;
-import com.example.newsservice.model.News;
 import com.example.newsservice.service.NewsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -35,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "News V1", description = "News API version V1")
 public class NewsController {
     private final NewsService newsService;
-    private final NewsMapper newsMapper;
+
 
     @Operation(summary = "Get all news", tags = {"get all"})
     @ApiResponses({
@@ -51,7 +49,7 @@ public class NewsController {
     })
     @PostMapping("/filter")
     public ResponseEntity<NewsListResponse> findAll(@Valid @RequestBody NewsFilter newsFilter) {
-        return ResponseEntity.ok(newsMapper.newsListToListResponse(newsService.findAll(newsFilter)));
+        return ResponseEntity.ok(newsService.findAll(newsFilter));
     }
 
     @Operation(summary = "Get news by ID", tags = {"get by id"})
@@ -65,7 +63,7 @@ public class NewsController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<SingleNewsResponse> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(newsMapper.newsToSingleResponse(newsService.findById(id)));
+        return ResponseEntity.ok(newsService.findById(id));
     }
 
     @Operation(summary = "Create news", tags = {"create"})
@@ -82,10 +80,9 @@ public class NewsController {
     })
     @PostMapping
     public ResponseEntity<SingleNewsResponse> create(@Valid @RequestBody UpsertNewsRequest request) {
-        News news = newsService.save(newsMapper.requestToNews(request));
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(newsMapper.newsToSingleResponse(news));
+                .body(newsService.save(request));
     }
 
     @Operation(summary = "Update news by ID", tags = {"update"})
@@ -106,10 +103,9 @@ public class NewsController {
     @PutMapping("/{id}")
     @UserVerifiable
     public ResponseEntity<SingleNewsResponse> update(@PathVariable Long id,
-                                                     @Valid @RequestBody UpsertNewsRequest request,
+                                                     @RequestBody UpsertNewsRequest request,
                                                      @RequestParam Long userId) {
-        News updatedNews = newsService.update(newsMapper.requestToNews(id, request));
-        return ResponseEntity.ok(newsMapper.newsToSingleResponse(updatedNews));
+        return ResponseEntity.ok(newsService.update(id, request));
     }
 
     @Operation(summary = "Delete news by ID", tags = {"delete"})
