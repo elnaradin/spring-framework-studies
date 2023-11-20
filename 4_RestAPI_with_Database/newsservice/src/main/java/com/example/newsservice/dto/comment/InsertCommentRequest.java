@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InsertCommentRequest {
-    @NotBlank(message = "Comment text must not be empty")
+    @NotBlank(message = "{requirements.comment.text}")
     private String text;
-    @NotNull(message = "User id must ne not null")
+    @NotNull(message = "{requirements.comment.userId}")
     private Long userId;
-    @NotNull(message = "News id must ne not null")
+    @NotNull(message = "{requirements.comment.newsId}")
     private Long newsId;
 }

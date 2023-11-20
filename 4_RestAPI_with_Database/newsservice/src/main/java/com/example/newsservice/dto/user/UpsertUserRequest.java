@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpsertUserRequest {
-    @NotBlank(message = "User name must not be empty")
+    @NotBlank(message = "{requirements.user.name}")
     private String name;
 }

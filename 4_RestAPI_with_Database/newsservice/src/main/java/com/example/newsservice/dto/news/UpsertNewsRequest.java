@@ -13,12 +13,12 @@ import java.util.List;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpsertNewsRequest {
-    @NotBlank(message = "title must not be blank")
+    @NotBlank(message = "{requirements.news.title}")
     private String title;
-    @NotBlank(message = "text must not be blank")
+    @NotBlank(message = "{requirements.news.text}")
     private String text;
-    @NotNull(message = "author ID must not be null")
+    @NotNull(message = "{requirements.news.authorId}")
     private Long authorId;
-    @NotEmpty(message = "must have at least one category")
+    @NotEmpty(message = "{requirements.news.categoryIds}")
     private List<Long> categoryIds;
 }

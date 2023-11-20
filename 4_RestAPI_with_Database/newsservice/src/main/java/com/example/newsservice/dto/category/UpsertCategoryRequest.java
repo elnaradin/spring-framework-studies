@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpsertCategoryRequest {
-    @NotBlank(message = "Category name must not be empty")
+    @NotBlank(message = "{requirements.category.name}")
     private String name;
 }

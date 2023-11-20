@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpdateCommentRequest {
-    @NotBlank(message = "Comment text must not be empty")
+    @NotBlank(message = "{requirements.comment.text}")
     private String text;
 }
