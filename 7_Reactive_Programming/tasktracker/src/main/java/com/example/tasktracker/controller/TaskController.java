@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,12 +32,14 @@ public class TaskController {
         return taskService.findAll();
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_MANAGER')")
     @GetMapping("/{id}")
     public Mono<ResponseEntity<TaskResponse>> findById(@PathVariable String id) {
         return taskService.findById(id)
                 .map(ResponseEntity::ok);
     }
 
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @PostMapping
     public Mono<ResponseEntity<TaskResponse>> create(@Valid @RequestBody UpsertTaskRequest request) {
         return taskService.create(request)
@@ -46,6 +49,7 @@ public class TaskController {
                 );
     }
 
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @PutMapping("/{id}")
     public Mono<ResponseEntity<TaskResponse>> update(@PathVariable String id,
                                                      @RequestBody UpsertTaskRequest request) {
@@ -53,12 +57,15 @@ public class TaskController {
                 .map(ResponseEntity::ok);
     }
 
+
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Void>> delete(@PathVariable String id) {
         return taskService.deleteById(id)
                 .map(ResponseEntity::ok);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_MANAGER')")
     @PutMapping("/addObserver")
     public Mono<ResponseEntity<TaskResponse>> addObserver(@RequestParam String taskId,
                                                           @RequestParam String observerId) {
@@ -66,6 +73,7 @@ public class TaskController {
                 .map(ResponseEntity::ok);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_MANAGER')")
     @PutMapping("/removeObserver")
     public Mono<ResponseEntity<TaskResponse>> removeObserver(@RequestParam String taskId,
                                                              @RequestParam String observerId) {

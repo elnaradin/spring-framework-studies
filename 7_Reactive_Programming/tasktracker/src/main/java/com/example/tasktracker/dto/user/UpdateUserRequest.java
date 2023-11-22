@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UpsertUserRequest {
+public class UpdateUserRequest {
     @NotBlank(message = "{requirements.name}")
     private String userName;
     @NotBlank(message = "{requirements.email}")

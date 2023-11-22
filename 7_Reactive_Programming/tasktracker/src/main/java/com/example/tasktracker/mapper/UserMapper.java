@@ -1,6 +1,7 @@
 package com.example.tasktracker.mapper;
 
-import com.example.tasktracker.dto.user.UpsertUserRequest;
+import com.example.tasktracker.dto.user.CreateUserRequest;
+import com.example.tasktracker.dto.user.UpdateUserRequest;
 import com.example.tasktracker.dto.user.UserResponse;
 import com.example.tasktracker.entity.User;
 import org.mapstruct.Mapper;
@@ -13,13 +14,15 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
-    User requestToUser(UpsertUserRequest request);
+    User requestToUser(CreateUserRequest request);
 
-    UpsertUserRequest userToRequest(User user);
+    UpdateUserRequest userToUpdateRequest(User user);
+
+    CreateUserRequest userToCreateRequest(User user);
 
     UserResponse userToResponse(User user);
 
     List<UserResponse> userToResponse(List<User> users);
 
-    void update(UpsertUserRequest source, @MappingTarget User target);
+    void update(UpdateUserRequest source, @MappingTarget User target);
 }

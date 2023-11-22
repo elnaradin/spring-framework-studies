@@ -19,4 +19,5 @@ public interface TaskService {
     Mono<TaskResponse> addObserver(String taskId, String observerId);
 
     Mono<TaskResponse> removeObserver(String taskId, String observerId);
+
 }

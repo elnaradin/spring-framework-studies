@@ -1,5 +1,6 @@
 package com.example.tasktracker.service;
 
+import com.example.tasktracker.aop.annotation.TaskAuthorVerifiable;
 import com.example.tasktracker.dto.task.TaskResponse;
 import com.example.tasktracker.dto.task.UpsertTaskRequest;
 import com.example.tasktracker.entity.Task;
@@ -36,7 +37,7 @@ public class TaskServiceImpl implements TaskService {
     public Mono<TaskResponse> findById(String id) {
         return taskRepository
                 .findById(id)
-                .switchIfEmpty(Mono.error(new EntityNotFoundException("Task not found with id:" + id)))
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("task.findById", id)))
                 .flatMap(this::fetchChildren)
                 .map(taskMapper::taskToResponse);
     }
@@ -45,13 +46,9 @@ public class TaskServiceImpl implements TaskService {
     public Mono<TaskResponse> create(UpsertTaskRequest request) {
         Mono<Task> taskMono = Mono.just(taskMapper.requestToTask(request));
         Mono<User> authorMono = userRepository.findById(request.getAuthorId())
-                .switchIfEmpty(Mono.error(new EntityNotFoundException(
-                        "Author not found when creating task with id:" + request.getAuthorId()
-                )));
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("task.create.authorId", request.getAuthorId())));
         Mono<User> assigneeMono = userRepository.findById(request.getAuthorId())
-                .switchIfEmpty(Mono.error(new EntityNotFoundException(
-                        "Assignee not found when creating task with id:" + request.getAuthorId()
-                )));
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("task.create.assigneeId", request.getAuthorId())));
         return taskMono
                 .zipWith(authorMono, (task, author) -> {
                     task.setAuthorId(author.getId());
@@ -73,14 +70,10 @@ public class TaskServiceImpl implements TaskService {
         String assigneeId = request.getAssigneeId();
         Mono<Task> taskMono = taskRepository
                 .findById(id)
-                .switchIfEmpty(Mono.error(new EntityNotFoundException(
-                        "Task not found when updating with id: " + id
-                )));
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("task.update.taskId", id)));
         if (authorId != null) {
             Mono<User> authorMono = userRepository.findById(authorId)
-                    .switchIfEmpty(Mono.error(new EntityNotFoundException(
-                            "Author not found when updating task with id:" + authorId
-                    )));
+                    .switchIfEmpty(Mono.error(new EntityNotFoundException("task.update.authorId", authorId)));
             taskMono = taskMono
                     .zipWith(authorMono, (task, author) -> {
                         task.setAuthorId(author.getId());
@@ -89,9 +82,7 @@ public class TaskServiceImpl implements TaskService {
         }
         if (assigneeId != null) {
             Mono<User> assigneeMono = userRepository.findById(assigneeId)
-                    .switchIfEmpty(Mono.error(new EntityNotFoundException(
-                            "Assignee not found when updating task with id:" + assigneeId
-                    )));
+                    .switchIfEmpty(Mono.error(new EntityNotFoundException("task.update.assigneeId", assigneeId)));
             taskMono = taskMono
                     .zipWith(assigneeMono, (task, assignee) -> {
                         task.setAssigneeId(assignee.getId());
@@ -112,22 +103,17 @@ public class TaskServiceImpl implements TaskService {
     public Mono<Void> deleteById(String id) {
         return taskRepository
                 .findById(id)
-                .switchIfEmpty(Mono.error(new EntityNotFoundException(
-                        "Task not found when deleting with id: " + id
-                )))
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("task.deleteById", id)))
                 .flatMap(taskRepository::delete);
     }
 
+    @TaskAuthorVerifiable
     @Override
     public Mono<TaskResponse> addObserver(String taskId, String observerId) {
         Mono<User> userMono = userRepository.findById(observerId)
-                .switchIfEmpty(Mono.error(new EntityNotFoundException(
-                        "User not found when adding observer with id: " + taskId
-                )));
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("task.addObserver.userId", observerId)));
         return taskRepository.findById(taskId)
-                .switchIfEmpty(Mono.error(new EntityNotFoundException(
-                        "Task not found when adding observer with id: " + taskId
-                )))
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("task.addObserver.taskId", taskId)))
                 .zipWith(userMono, (task, user) -> {
                     task.getObserverIds().add(user.getId());
                     return task;
@@ -137,20 +123,17 @@ public class TaskServiceImpl implements TaskService {
                 .map(taskMapper::taskToResponse);
     }
 
+    @TaskAuthorVerifiable
     @Override
     public Mono<TaskResponse> removeObserver(String taskId, String observerId) {
         Mono<User> userMono = userRepository.findById(observerId)
-                .switchIfEmpty(Mono.error(new EntityNotFoundException(
-                        "User not found when removing observer with id: " + taskId
-                )));
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("task.removeObserver.userId", observerId)));
         return taskRepository.findById(taskId)
-                .switchIfEmpty(Mono.error(new EntityNotFoundException(
-                        "Task not found when removing observer with id: " + taskId
-                )))
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("task.removeObserver.taskId", taskId)))
                 .zipWith(userMono, (task, user) -> {
                     Set<String> observers = task.getObserverIds();
                     if (observers == null || observers.stream().noneMatch(id -> id.equals(user.getId()))) {
-                        throw new EntityNotFoundException("Task doesn't contain observer with id: " + user.getId());
+                        throw new EntityNotFoundException("task.removeObserver.userNotObserver", user.getId());
                     }
                     task.getObserverIds().remove(user.getId());
                     return task;
@@ -162,13 +145,9 @@ public class TaskServiceImpl implements TaskService {
 
     private Mono<? extends Task> fetchChildren(Task initialTask) {
         Mono<User> authorMono = userRepository.findById(initialTask.getAuthorId())
-                .switchIfEmpty(Mono.error(new EntityNotFoundException(
-                        "Author not found with id: " + initialTask.getAuthorId()
-                )));
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("task.find.authorId", initialTask.getAuthorId())));
         Mono<User> assigneeMono = userRepository.findById(initialTask.getAssigneeId())
-                .switchIfEmpty(Mono.error(new EntityNotFoundException(
-                        "Assignee not found with id: " + initialTask.getAssigneeId()
-                )));
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("task.find.assigneeId", initialTask.getAuthorId())));
         Flux<User> observersFlux;
         if (initialTask.getObserverIds() != null) {
             observersFlux = userRepository.findAllById(initialTask.getObserverIds());

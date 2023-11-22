@@ -1,6 +1,7 @@
 package com.example.tasktracker.controller;
 
 import com.example.tasktracker.AbstractTest;
+import com.example.tasktracker.dto.ErrorResponse;
 import com.example.tasktracker.dto.task.TaskResponse;
 import com.example.tasktracker.dto.task.UpsertTaskRequest;
 import com.example.tasktracker.entity.Task;
@@ -8,12 +9,14 @@ import com.example.tasktracker.mapper.TaskMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 class TaskControllerTest extends AbstractTest {
     private static final String BASE_URI = "/api/v1/task";
@@ -113,7 +116,7 @@ class TaskControllerTest extends AbstractTest {
     }
 
     @Test
-    void addAndRemoveObserver() {
+    void addAndRemoveObserverByManager() {
         StepVerifier.create(taskRepository.count())
                 .expectNext(2L)
                 .expectComplete()
@@ -134,6 +137,57 @@ class TaskControllerTest extends AbstractTest {
                 .expectStatus().isOk()
                 .expectBody(TaskResponse.class)
                 .value(data -> assertEquals(0, data.getObservers().size()));
+
+    }
+
+    @Test
+    @WithMockUser(username = "User1", roles = "USER")
+    void addAndRemoveObserverByUser() {
+        StepVerifier.create(taskRepository.count())
+                .expectNext(2L)
+                .expectComplete()
+                .verify();
+        webTestClient.put().uri(uriBuilder -> uriBuilder
+                        .path(BASE_URI + "/addObserver")
+                        .queryParam("taskId", FIRST_TASK_ID)
+                        .queryParam("observerId", FIRST_USER_ID).build())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(TaskResponse.class)
+                .value(data -> assertEquals(1, data.getObservers().size()));
+        webTestClient.put().uri(uriBuilder -> uriBuilder
+                        .path(BASE_URI + "/removeObserver")
+                        .queryParam("taskId", FIRST_TASK_ID)
+                        .queryParam("observerId", FIRST_USER_ID).build())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(TaskResponse.class)
+                .value(data -> assertEquals(0, data.getObservers().size()));
+    }
+
+    @Test
+    @WithMockUser(username = "User1", roles = "USER")
+    void addAndRemoveObserverByUserFail() {
+        StepVerifier.create(taskRepository.count())
+                .expectNext(2L)
+                .expectComplete()
+                .verify();
+        webTestClient.put().uri(uriBuilder -> uriBuilder
+                        .path(BASE_URI + "/addObserver")
+                        .queryParam("taskId", FIRST_TASK_ID)
+                        .queryParam("observerId", SECOND_USER_ID).build())
+                .exchange()
+                .expectStatus().isForbidden()
+                .expectBody(ErrorResponse.class)
+                .value(response -> assertEquals("Unable to add/remove observer. User with name 'User1' isn't the owner of this observer's account", response.getMessage()));
+        webTestClient.put().uri(uriBuilder -> uriBuilder
+                        .path(BASE_URI + "/removeObserver")
+                        .queryParam("taskId", FIRST_TASK_ID)
+                        .queryParam("observerId", SECOND_USER_ID).build())
+                .exchange()
+                .expectStatus().isForbidden()
+                .expectBody(ErrorResponse.class)
+                .value(response -> assertEquals("Unable to add/remove observer. User with name 'User1' isn't the owner of this observer's account", response.getMessage()));
 
     }
 }
