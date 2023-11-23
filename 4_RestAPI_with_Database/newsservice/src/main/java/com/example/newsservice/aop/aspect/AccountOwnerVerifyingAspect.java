@@ -11,8 +11,6 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.text.MessageFormat;
-
 @Aspect
 @Component
 @Slf4j
@@ -26,9 +24,7 @@ public class AccountOwnerVerifyingAspect {
         Long userId = Long.parseLong(RequestAttributesUtils.getPathVariable("id"));
         boolean isOwner = userService.existsByUsernameAndId(principal.getUsername(), userId);
         if (!isOwner && !PrincipalUtils.isAdminOrModerator()) {
-            throw new UserNotAuthorizedException(MessageFormat.format(
-                    "User with name ''{0}'' isn''t the author of this comment", principal.getUsername()
-            ));
+            throw new UserNotAuthorizedException("user.notAccountOwner", principal.getUsername());
         }
     }
 }

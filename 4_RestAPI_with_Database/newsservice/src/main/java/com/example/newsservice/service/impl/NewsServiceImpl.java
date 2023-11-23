@@ -40,7 +40,7 @@ public class NewsServiceImpl implements NewsService {
     public SingleNewsResponse findById(Long id) {
         News news = newsRepository
                 .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("News not found. ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("news.findById", id));
         return newsMapper.newsToSingleResponse(news);
     }
 
@@ -51,7 +51,7 @@ public class NewsServiceImpl implements NewsService {
         if (request.getAuthorId() != null) {
             news.setAuthor(userRepository.findById(request.getAuthorId())
                     .orElseThrow(() -> new EntityNotFoundException(
-                            "Author not found when creating news. ID: " + request.getAuthorId()
+                            "news.create.authorId", request.getAuthorId()
                     )));
         }
         if (request.getCategoryIds() != null && !request.getCategoryIds().isEmpty()) {
@@ -66,12 +66,12 @@ public class NewsServiceImpl implements NewsService {
 
         News news = newsRepository
                 .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("News not found when updating. ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("news.update.newsId", id));
         newsMapper.update(id, request, news);
         if (request.getAuthorId() != null) {
             news.setAuthor(userRepository.findById(request.getAuthorId())
                     .orElseThrow(() -> new EntityNotFoundException(
-                            "Author not found when updating news. ID: " + request.getAuthorId()
+                            "news.update.authorId", request.getAuthorId()
                     )));
         }
         if (request.getCategoryIds() != null && !request.getCategoryIds().isEmpty()) {

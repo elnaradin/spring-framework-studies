@@ -32,7 +32,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponse findById(Long id) {
         Category category = categoryRepository
                 .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Category not found. ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("category.findById", id));
         return categoryMapper.categoryToResponse(category);
     }
 
@@ -47,7 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponse update(Long id, UpsertCategoryRequest request) {
         Category category = categoryRepository
                 .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Category not found when updating. ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("category.update", id));
         categoryMapper.update(id, request, category);
         return categoryMapper.categoryToResponse(categoryRepository.save(category));
     }

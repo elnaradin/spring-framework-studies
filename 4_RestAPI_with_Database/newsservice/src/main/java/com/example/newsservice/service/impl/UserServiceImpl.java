@@ -18,8 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.MessageFormat;
-
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -37,16 +35,15 @@ public class UserServiceImpl implements UserService {
     public UserResponse findById(Long id) {
         User user = userRepository
                 .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found. ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("user.findById", id));
         return userMapper.userToResponse(user);
     }
 
     @Override
     public UserResponse create(CreateUserRequest request) {
         if (userRepository.existsByName(request.getName())) {
-            throw new DuplicateEntryException(MessageFormat.format(
-                    "User with name ''{0}'' already exists", request.getName()
-            ));
+            throw new DuplicateEntryException(
+                    "user.create.alreadyExists", request.getName());
         }
         User user = userMapper.requestToUser(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -58,7 +55,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse update(Long id, UpdateUserRequest request) {
         User user = userRepository
                 .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found when updating. ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("user.update", id));
         userMapper.update(id, request, user);
         return userMapper.userToResponse(userRepository.save(user));
     }

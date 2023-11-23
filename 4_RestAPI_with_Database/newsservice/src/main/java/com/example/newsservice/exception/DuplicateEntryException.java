@@ -1,7 +1,9 @@
 package com.example.newsservice.exception;
 
-public class DuplicateEntryException extends RuntimeException {
-    public DuplicateEntryException(String message) {
-        super(message);
+public class DuplicateEntryException extends AbstractExceptionWithMessageKey {
+
+
+    public DuplicateEntryException(String messageKey, String userName) {
+        super(messageKey, userName);
     }
 }

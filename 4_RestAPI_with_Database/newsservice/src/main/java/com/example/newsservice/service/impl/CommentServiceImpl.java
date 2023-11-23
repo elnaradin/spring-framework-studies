@@ -37,11 +37,11 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentMapper.requestToComment(request);
         comment.setNews(newsRepository.findById(request.getNewsId())
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "News not found when creating comment. ID: " + request.getNewsId()
+                        "comment.create.newsId", request.getNewsId()
                 )));
         comment.setUser(userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "User not found when creating comment. ID: " + request.getNewsId()
+                        "comment.create.userId", request.getNewsId()
                 )));
         return commentMapper.commentToResponse(commentRepository.save(comment));
     }
@@ -51,7 +51,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentResponse update(Long id, UpdateCommentRequest request) {
         Comment comment = commentRepository
                 .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Comment not found when updating. ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("comment.update", id));
         commentMapper.update(id, request, comment);
         return commentMapper.commentToResponse(commentRepository.save(comment));
     }
@@ -70,7 +70,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentResponse findById(Long id) {
         Comment comment = commentRepository
                 .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Comment not found. ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("comments.findById", id));
         return commentMapper.commentToResponse(comment);
     }
 
