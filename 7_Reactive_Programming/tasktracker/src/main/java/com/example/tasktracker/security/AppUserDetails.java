@@ -7,7 +7,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-public record TaskTrackerUserDetails(User user) implements UserDetails {
+public record AppUserDetails(User user) implements UserDetails {
+
+    public String getUserId() {
+        return user.getId();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return user.getRoles().stream()

@@ -16,6 +16,6 @@ public class ReactiveUserDetailsServiceImpl implements ReactiveUserDetailsServic
 
     @Override
     public Mono<UserDetails> findByUsername(String username) {
-        return userService.findByUsername(username).map(TaskTrackerUserDetails::new);
+        return userService.findByUsername(username).map(AppUserDetails::new);
     }
 }

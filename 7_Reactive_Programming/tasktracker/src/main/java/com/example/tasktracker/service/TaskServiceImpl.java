@@ -9,6 +9,7 @@ import com.example.tasktracker.exception.EntityNotFoundException;
 import com.example.tasktracker.mapper.TaskMapper;
 import com.example.tasktracker.repository.TaskRepository;
 import com.example.tasktracker.repository.UserRepository;
+import com.example.tasktracker.security.PrincipalUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -45,10 +46,12 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Mono<TaskResponse> create(UpsertTaskRequest request) {
         Mono<Task> taskMono = Mono.just(taskMapper.requestToTask(request));
-        Mono<User> authorMono = userRepository.findById(request.getAuthorId())
-                .switchIfEmpty(Mono.error(new EntityNotFoundException("task.create.authorId", request.getAuthorId())));
-        Mono<User> assigneeMono = userRepository.findById(request.getAuthorId())
-                .switchIfEmpty(Mono.error(new EntityNotFoundException("task.create.assigneeId", request.getAuthorId())));
+        Mono<String> authorIdMono = PrincipalUtils.getUserId();
+        Mono<User> authorMono = authorIdMono.flatMap(authorId -> userRepository
+                .findById(authorId)
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("task.create.authorId", authorId))));
+        Mono<User> assigneeMono = authorIdMono.flatMap(authorId -> userRepository.findById(authorId)
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("task.create.assigneeId", authorId))));
         return taskMono
                 .zipWith(authorMono, (task, author) -> {
                     task.setAuthorId(author.getId());
@@ -66,28 +69,24 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Mono<TaskResponse> update(String id, UpsertTaskRequest request) {
-        String authorId = request.getAuthorId();
         String assigneeId = request.getAssigneeId();
         Mono<Task> taskMono = taskRepository
                 .findById(id)
                 .switchIfEmpty(Mono.error(new EntityNotFoundException("task.update.taskId", id)));
-        if (authorId != null) {
-            Mono<User> authorMono = userRepository.findById(authorId)
-                    .switchIfEmpty(Mono.error(new EntityNotFoundException("task.update.authorId", authorId)));
-            taskMono = taskMono
-                    .zipWith(authorMono, (task, author) -> {
-                        task.setAuthorId(author.getId());
-                        return task;
-                    });
-        }
+        Mono<String> authorIdMono = PrincipalUtils.getUserId();
+        Mono<User> authorMono = authorIdMono.flatMap(authorId -> userRepository.findById(authorId)
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("task.update.authorId", authorId))));
+        taskMono = taskMono.zipWith(authorMono, (task, author) -> {
+            task.setAuthorId(author.getId());
+            return task;
+        });
         if (assigneeId != null) {
             Mono<User> assigneeMono = userRepository.findById(assigneeId)
                     .switchIfEmpty(Mono.error(new EntityNotFoundException("task.update.assigneeId", assigneeId)));
-            taskMono = taskMono
-                    .zipWith(assigneeMono, (task, assignee) -> {
-                        task.setAssigneeId(assignee.getId());
-                        return task;
-                    });
+            taskMono = taskMono.zipWith(assigneeMono, (task, assignee) -> {
+                task.setAssigneeId(assignee.getId());
+                return task;
+            });
         }
         return taskMono
                 .flatMap(task -> {

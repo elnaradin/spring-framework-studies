@@ -16,8 +16,6 @@ public class UpsertTaskRequest {
     private String description;
     @NotNull(message = "{requirements.status}")
     private TaskStatus status;
-    @NotBlank(message = "{requirements.authorId}")
-    private String authorId;
     @NotBlank(message = "{requirements.assigneeId}")
     private String assigneeId;
 }

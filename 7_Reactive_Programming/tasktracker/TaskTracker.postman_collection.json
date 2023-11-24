@@ -145,11 +145,14 @@
 				{
 					"name": "create",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userName\": \"some observer\",\r\n    \"email\": \"someEmail@email\"\r\n\r\n}",
+							"raw": "{\r\n    \"userName\": \"manager\",\r\n    \"email\": \"some@email\",\r\n    \"password\": \"pass\",\r\n    \"roles\": [\r\n    \"ROLE_MANAGER\"\r\n  ]\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -208,6 +211,13 @@
 			]
 		}
 	],
+	"auth": {
+		"type": "basic",
+		"basic": {
+			"username": "manager",
+			"password": "pass"
+		}
+	},
 	"event": [
 		{
 			"listen": "prerequest",

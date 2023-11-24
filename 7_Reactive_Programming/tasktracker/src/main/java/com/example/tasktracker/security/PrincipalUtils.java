@@ -24,6 +24,10 @@ public class PrincipalUtils {
 
     }
 
+    public Mono<String> getUserId() {
+        return getUserDetails().cast(AppUserDetails.class).map(AppUserDetails::getUserId);
+    }
+
     public Mono<Boolean> isManager() {
         return getUserDetails().map(UserDetails::getAuthorities)
                 .map(grantedAuthorities -> grantedAuthorities
