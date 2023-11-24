@@ -2,12 +2,13 @@ package com.example.newsservice.controller;
 
 import com.example.newsservice.AbstractTestController;
 import com.example.newsservice.StringTestUtils;
-import com.example.newsservice.dto.NewsFilter;
+import com.example.newsservice.dto.user.NewsFilter;
 import com.example.newsservice.dto.news.UpsertNewsRequest;
 import com.example.newsservice.model.Category;
 import com.example.newsservice.model.Comment;
 import com.example.newsservice.model.News;
 import com.example.newsservice.model.User;
+import com.example.newsservice.security.AppUserDetails;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,7 @@ import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
 import static org.mockito.ArgumentMatchers.anyIterable;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -49,7 +51,6 @@ public class NewsControllerTest extends AbstractTestController {
                 .builder()
                 .text("Text 1")
                 .title("Title 1")
-                .authorId(1L)
                 .categoryIds(List.of(1L))
                 .build();
     }
@@ -116,7 +117,8 @@ public class NewsControllerTest extends AbstractTestController {
                 .perform(put("/api/v1/news/1")
                         .param("userId", "1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .content(objectMapper.writeValueAsString(request))
+                        .with(user(new AppUserDetails(user))))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -157,7 +159,8 @@ public class NewsControllerTest extends AbstractTestController {
         String actualResponse = mockMvc
                 .perform(post("/api/v1/news")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .content(objectMapper.writeValueAsString(request)
+                        ).with(user(new AppUserDetails(user))))
                 .andExpect(status().isCreated())
                 .andReturn()
                 .getResponse()

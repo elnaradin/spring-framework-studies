@@ -11,6 +11,12 @@ public class PrincipalUtils {
         return (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
+    public Long getUserId() {
+        AppUserDetails userDetails = (AppUserDetails) getUserDetails();
+        return userDetails.getId();
+
+    }
+
     public boolean isAdminOrModerator() {
         return getUserDetails().getAuthorities().stream().anyMatch(authority -> {
             String authorityName = authority.getAuthority();

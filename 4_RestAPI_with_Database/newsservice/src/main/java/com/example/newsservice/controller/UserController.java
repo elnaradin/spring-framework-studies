@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,15 +37,10 @@ public class UserController {
     private final UserService userService;
 
 
-    @SecurityRequirement(name = "basicAuth")
     @Operation(summary = "Get all users", tags = {"get all"})
     @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    content = {@Content(schema = @Schema(implementation = UserListResponse.class), mediaType = "application/json")}),
-            @ApiResponse(
-                    responseCode = "404",
-                    content = {@Content(schema = @Schema(implementation = ErrorResponse.class), mediaType = "application/json")})
+            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = UserListResponse.class), mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ErrorResponse.class), mediaType = "application/json")})
     })
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping
@@ -56,16 +50,12 @@ public class UserController {
     }
 
 
-    @SecurityRequirement(name = "basicAuth")
     @Operation(summary = "Get user by ID", tags = {"get by id"})
     @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    content = {@Content(schema = @Schema(implementation = UserResponse.class), mediaType = "application/json")}),
-            @ApiResponse(
-                    responseCode = "404",
-                    content = {@Content(schema = @Schema(implementation = ErrorResponse.class), mediaType = "application/json")})
+            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = UserResponse.class), mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ErrorResponse.class), mediaType = "application/json")})
     })
+    @AccountOwnerVerifiable
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MODERATOR')")
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> findById(@PathVariable Long id) {
@@ -75,25 +65,18 @@ public class UserController {
 
     @Operation(summary = "Create user", tags = {"create"})
     @ApiResponses({
-            @ApiResponse(
-                    responseCode = "201",
-                    content = {@Content(schema = @Schema(implementation = UserResponse.class), mediaType = "application/json")}),
-            @ApiResponse(
-                    responseCode = "404",
-                    content = {@Content(schema = @Schema(implementation = ErrorResponse.class), mediaType = "application/json")}),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = {@Content(schema = @Schema(implementation = ErrorResponse.class), mediaType = "application/json")})
+            @ApiResponse(responseCode = "201", content = {@Content(schema = @Schema(implementation = UserResponse.class), mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(implementation = ErrorResponse.class), mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = ErrorResponse.class), mediaType = "application/json")})
     })
     @PostMapping
-    public ResponseEntity<UserResponse> create(@Valid @RequestBody CreateUserRequest request) {
+    public ResponseEntity<UserResponse> register(@Valid @RequestBody CreateUserRequest request) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(userService.create(request));
+                .body(userService.register(request));
     }
 
 
-    @SecurityRequirement(name = "basicAuth")
     @Operation(summary = "Update user by ID", tags = {"update"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = UserResponse.class), mediaType = "application/json")}),
@@ -110,7 +93,6 @@ public class UserController {
     }
 
 
-    @SecurityRequirement(name = "basicAuth")
     @Operation(summary = "Delete user by ID", tags = {"delete"})
     @ApiResponses({
             @ApiResponse(responseCode = "204"),

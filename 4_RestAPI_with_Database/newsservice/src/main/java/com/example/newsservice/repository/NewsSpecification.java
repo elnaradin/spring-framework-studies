@@ -1,6 +1,6 @@
 package com.example.newsservice.repository;
 
-import com.example.newsservice.dto.NewsFilter;
+import com.example.newsservice.dto.user.NewsFilter;
 import com.example.newsservice.model.Category;
 import com.example.newsservice.model.News;
 import com.example.newsservice.model.User;

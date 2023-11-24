@@ -1,4 +1,4 @@
-package com.example.newsservice.service.impl;
+package com.example.newsservice.service;
 
 import com.example.newsservice.dto.category.CategoryListResponse;
 import com.example.newsservice.dto.category.CategoryResponse;
@@ -7,7 +7,6 @@ import com.example.newsservice.exception.EntityNotFoundException;
 import com.example.newsservice.mapper.CategoryMapper;
 import com.example.newsservice.model.Category;
 import com.example.newsservice.repository.CategoryRepository;
-import com.example.newsservice.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

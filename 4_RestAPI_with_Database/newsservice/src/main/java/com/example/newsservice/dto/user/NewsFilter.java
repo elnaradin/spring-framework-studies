@@ -1,4 +1,4 @@
-package com.example.newsservice.dto;
+package com.example.newsservice.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotNull;

@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 public class CreateCommentRequest {
     @NotBlank(message = "{requirements.comment.text}")
     private String text;
-    @NotNull(message = "{requirements.comment.userId}")
-    private Long userId;
+    //    @NotNull(message = "{requirements.comment.userId}")
+//    private Long userId;
     @NotNull(message = "{requirements.comment.newsId}")
     private Long newsId;
 }

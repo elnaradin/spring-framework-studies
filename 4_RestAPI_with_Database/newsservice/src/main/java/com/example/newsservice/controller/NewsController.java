@@ -2,17 +2,16 @@ package com.example.newsservice.controller;
 
 import com.example.newsservice.aop.annotation.NewsAuthorVerifiable;
 import com.example.newsservice.dto.ErrorResponse;
-import com.example.newsservice.dto.NewsFilter;
 import com.example.newsservice.dto.news.NewsListResponse;
 import com.example.newsservice.dto.news.SingleNewsResponse;
 import com.example.newsservice.dto.news.UpsertNewsRequest;
+import com.example.newsservice.dto.user.NewsFilter;
 import com.example.newsservice.service.NewsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/news")
 @Tag(name = "News V1", description = "News API version V1")
-@SecurityRequirement(name = "basicAuth")
 public class NewsController {
     private final NewsService newsService;
 

@@ -3,7 +3,6 @@ package com.example.newsservice.dto.news;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,8 +16,8 @@ public class UpsertNewsRequest {
     private String title;
     @NotBlank(message = "{requirements.news.text}")
     private String text;
-    @NotNull(message = "{requirements.news.authorId}")
-    private Long authorId;
+    //    @NotNull(message = "{requirements.news.authorId}")
+//    private Long authorId;
     @NotEmpty(message = "{requirements.news.categoryIds}")
     private List<Long> categoryIds;
 }

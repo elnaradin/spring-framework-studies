@@ -1,8 +1,12 @@
 server:
-  host: ${SERVER_HOST}
-  port: ${SERVER_PORT}
+  host: ${APP_HOST}
+  port: ${APP_PORT}
 
 spring:
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
   jpa:
     generate-ddl: true
     open-in-view: false
@@ -15,3 +19,10 @@ spring:
       connection-timeout: 10000
   profiles:
     active: default
+
+app:
+  authentication-type: ${AUTH_TYPE}
+  jwt:
+    secret: ${JWT_SECRET}
+    tokenExpiration: ${JWT_ACCESS_EXPIRATION}
+    refreshTokenExpiration: ${JWT_REFRESH_EXPIRATION}

@@ -3,6 +3,7 @@ package com.example.newsservice.controller;
 import com.example.newsservice.dto.ErrorResponse;
 import com.example.newsservice.exception.DuplicateEntryException;
 import com.example.newsservice.exception.EntityNotFoundException;
+import com.example.newsservice.exception.RefreshTokenException;
 import com.example.newsservice.exception.UserNotAuthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -19,16 +20,16 @@ import java.util.List;
 @Slf4j
 public class ExceptionHandlerControllerAdvice {
 
-    @ExceptionHandler(UserNotAuthorizedException.class)
-    public ResponseEntity<ErrorResponse> notAuthorized(UserNotAuthorizedException ex) {
-        log.warn(ex.getMessage());
+    @ExceptionHandler({UserNotAuthorizedException.class, RefreshTokenException.class})
+    public ResponseEntity<ErrorResponse> notAuthorized(Exception ex) {
+        log.error(ex.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(new ErrorResponse(ex.getLocalizedMessage()));
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> notFound(EntityNotFoundException ex) {
-        log.warn(ex.getMessage());
+        log.error(ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(ex.getLocalizedMessage()));
     }
@@ -41,7 +42,7 @@ public class ExceptionHandlerControllerAdvice {
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .toList();
         String message = String.join("; ", messages);
-        log.warn(message);
+        log.error(message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(message));
     }
@@ -50,4 +51,5 @@ public class ExceptionHandlerControllerAdvice {
     public ResponseEntity<ErrorResponse> duplicateEntry(DuplicateEntryException ex) {
         return ResponseEntity.badRequest().body(new ErrorResponse(ex.getMessage()));
     }
+
 }

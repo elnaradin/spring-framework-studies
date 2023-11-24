@@ -3,10 +3,13 @@ package com.example.newsservice;
 import com.example.newsservice.model.Category;
 import com.example.newsservice.model.Comment;
 import com.example.newsservice.model.News;
+import com.example.newsservice.model.Role;
+import com.example.newsservice.model.RoleType;
 import com.example.newsservice.model.User;
 import com.example.newsservice.repository.CategoryRepository;
 import com.example.newsservice.repository.CommentRepository;
 import com.example.newsservice.repository.NewsRepository;
+import com.example.newsservice.repository.RefreshTokenRepository;
 import com.example.newsservice.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +40,10 @@ public class AbstractTestController {
     protected CategoryRepository categoryRepository;
     @MockBean
     protected CommentRepository commentRepository;
-    private final LocalDateTime someTime = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
+    @MockBean
+    protected RefreshTokenRepository refreshTokenRepository;
 
+    private final LocalDateTime someTime = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
     protected News createNews(Long id, User author, List<Category> categoryList) {
         return News
                 .builder()
@@ -56,11 +61,15 @@ public class AbstractTestController {
     }
 
     protected User createUser(Long id) {
-        return User
+        User user = User
                 .builder()
                 .id(id)
                 .name("User " + id)
                 .build();
+        Role role = Role.from(RoleType.ROLE_USER);
+        role.setUser(user);
+        user.setRoles(List.of(role));
+        return user;
     }
 
     protected Comment createComment(Long id, User user) {

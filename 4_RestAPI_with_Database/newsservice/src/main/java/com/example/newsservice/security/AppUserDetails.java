@@ -9,8 +9,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 @RequiredArgsConstructor
-public class NewsServiceUserDetails implements UserDetails {
+public class AppUserDetails implements UserDetails {
     private final User user;
+
+    public Long getId() {
+        return user.getId();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

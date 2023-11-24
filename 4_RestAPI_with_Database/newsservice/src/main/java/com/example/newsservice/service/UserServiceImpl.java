@@ -1,4 +1,4 @@
-package com.example.newsservice.service.impl;
+package com.example.newsservice.service;
 
 import com.example.newsservice.dto.user.CreateUserRequest;
 import com.example.newsservice.dto.user.UpdateUserRequest;
@@ -9,11 +9,9 @@ import com.example.newsservice.exception.EntityNotFoundException;
 import com.example.newsservice.mapper.UserMapper;
 import com.example.newsservice.model.User;
 import com.example.newsservice.repository.UserRepository;
-import com.example.newsservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse create(CreateUserRequest request) {
+    public UserResponse register(CreateUserRequest request) {
         if (userRepository.existsByName(request.getName())) {
             throw new DuplicateEntryException(
                     "user.create.alreadyExists", request.getName());
@@ -78,11 +76,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(Long id) {
         userRepository.deleteById(id);
-    }
-
-    public User findByUsername(String username) {
-        return userRepository.findByName(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found: " + username));
     }
 
 

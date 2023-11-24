@@ -11,18 +11,31 @@ services:
       - POSTGRES_DB=news_service_db
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  redis:
+    container_name: redis
+    image: redis:7.0.12
+    ports:
+      - "6379:6379"
+
   news-service:
     image: news-service
     ports:
       - 8888:8888
     container_name: news-service
     environment:
-      - SERVER_HOST=localhost
-      - SERVER_PORT=8888
+      - APP_HOST=localhost
+      - APP_PORT=8888
       - DB_HOST=psql
       - DB_PORT=5432
       - DB_NAME=news_service_db
       - DB_USER=postgres
       - DB_PASSWORD=postgres
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=someTokenSecret
+      - JWT_ACCESS_EXPIRATION=5m
+      - JWT_REFRESH_EXPIRATION=5m
+      - AUTH_TYPE=jwt
     depends_on:
       - psql
+      - redis

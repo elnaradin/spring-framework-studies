@@ -6,6 +6,7 @@ import com.example.newsservice.dto.comment.CreateCommentRequest;
 import com.example.newsservice.model.Comment;
 import com.example.newsservice.model.News;
 import com.example.newsservice.model.User;
+import com.example.newsservice.security.AppUserDetails;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,7 +39,7 @@ public class CommentControllerTest extends AbstractTestController {
     void setUp() {
         user = createUser(1L);
         comment = createComment(1L, user);
-        request = new CreateCommentRequest("Text 1", 1L, 1L);
+        request = new CreateCommentRequest("Text 1", 1L);
         news = createNews(1L, user, new ArrayList<>());
     }
 
@@ -120,7 +122,9 @@ public class CommentControllerTest extends AbstractTestController {
         String actualResponse = mockMvc
                 .perform(post("/api/v1/comment")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .content(objectMapper.writeValueAsString(request))
+                        .with(user(new AppUserDetails(user)))
+                )
                 .andExpect(status().isCreated())
                 .andReturn()
                 .getResponse()

@@ -1,0 +1,447 @@
+{
+	"info": {
+		"_postman_id": "e6960192-f72f-42e3-9b54-3b5dab648ce0",
+		"name": "NewsService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "24909295"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://{{host}}:{{port}}/api/v1/user/3"
+					},
+					"response": []
+				},
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/user?pageNumber=0&pageSize=10",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"user"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "0"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"moderator\",\r\n  \"password\": \"pass\",\r\n  \"roles\": [\r\n    \"ROLE_MODERATOR\"\r\n  ]\r\n}"
+						},
+						"url": "http://{{host}}:{{port}}/api/v1/user"
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://{{host}}:{{port}}/api/v1/user/2"
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Polly\",\r\n  \"password\": \"pass\"\r\n}"
+						},
+						"url": "http://{{host}}:{{port}}/api/v1/user/8"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "news",
+			"item": [
+				{
+					"name": "findByFilter",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"pageNumber\": 0,\r\n  \"pageSize\": 5,\r\n  \"categoryId\": null,\r\n  \"authorId\": null\r\n}"
+						},
+						"url": "http://{{host}}:{{port}}/api/v1/news/filter"
+					},
+					"response": []
+				},
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://{{host}}:{{port}}/api/v1/news/10"
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"string\",\r\n  \"text\": \"string\",\r\n  \"categoryIds\": [\r\n    1\r\n  ]\r\n}"
+						},
+						"url": "http://{{host}}:{{port}}/api/v1/news"
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://{{host}}:{{port}}/api/v1/news/5"
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"string\",\r\n  \"text\": \"string\",\r\n  \"authorId\": 1,\r\n  \"categoryIds\": [\r\n    1\r\n  ]\r\n}"
+						},
+						"url": "http://{{host}}:{{port}}/api/v1/news/2"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "category",
+			"item": [
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://{{host}}:{{port}}/api/v1/category/7"
+					},
+					"response": []
+				},
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/category?pageNumber=0&pageSize=5",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"category"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "0"
+								},
+								{
+									"key": "pageSize",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"string\"\r\n}"
+						},
+						"url": "http://{{host}}:{{port}}/api/v1/category"
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://{{host}}:{{port}}/api/v1/category/2"
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"stringblabla\"\r\n}"
+						},
+						"url": "http://{{host}}:{{port}}/api/v1/category/1"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "comment",
+			"item": [
+				{
+					"name": "findByNewsId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://{{host}}:{{port}}/api/v1/comment/byNews/1"
+					},
+					"response": []
+				},
+				{
+					"name": "findAllByNews",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://{{host}}:{{port}}/api/v1/comment/byNews/1"
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"text\": \"string\",\r\n  \"newsId\": 1\r\n}"
+						},
+						"url": "http://{{host}}:{{port}}/api/v1/comment"
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://{{host}}:{{port}}/api/v1/comment/4"
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"text\": \"stringbla\"\r\n}"
+						},
+						"url": "http://{{host}}:{{port}}/api/v1/comment/1"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": "http://{{host}}:{{port}}/api/v1/auth/logout"
+					},
+					"response": []
+				},
+				{
+					"name": "signIn",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"user\",\r\n    \"password\": \"pass\"\r\n}"
+						},
+						"url": "http://{{host}}:{{port}}/api/v1/auth/signIn"
+					},
+					"response": []
+				},
+				{
+					"name": "refreshToken",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refreshToken\": \"439cbf44-7580-4fb2-a7d9-e64765e845df\"\r\n}"
+						},
+						"url": "http://{{host}}:{{port}}/api/v1/auth/refresh-token"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": {
+			"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNzAwNzgzNDkzLCJleHAiOjE3MDA3ODM3OTN9.9M-3m6dJxg0HVgWWKENJmLwzgh260dnUBm0NFPSm9KAeHDI-xHe5YsybTbcVbDI0JRc1pDXRUtL7mzdaWSCSVA"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "localhost"
+		},
+		{
+			"key": "password",
+			"value": "pass"
+		},
+		{
+			"key": "username",
+			"value": "admin"
+		},
+		{
+			"key": "port",
+			"value": "8080",
+			"type": "string"
+		}
+	]
+}

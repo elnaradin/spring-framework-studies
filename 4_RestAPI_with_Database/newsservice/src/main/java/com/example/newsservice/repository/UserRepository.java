@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select (count(u) > 0) from User u inner join u.comments comments where u.name = ?1 and comments.id = ?2")
     boolean existsByNameAndCommentsId(String name, Long id1);
 
-    @Query("select (count(u) > 0) from User u inner join u.newsList newsList where u.id = ?1 and newsList.id = ?2")
+    @Query("select (count(u) > 0) from User u inner join u.newsList newsList where u.name = ?1 and newsList.id = ?2")
     boolean existsByNameAndNewsListId(String name, Long id1);
 
     @EntityGraph(attributePaths = {"roles"})

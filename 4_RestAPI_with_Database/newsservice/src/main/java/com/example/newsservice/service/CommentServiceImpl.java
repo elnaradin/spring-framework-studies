@@ -1,4 +1,4 @@
-package com.example.newsservice.service.impl;
+package com.example.newsservice.service;
 
 import com.example.newsservice.dto.comment.CommentResponse;
 import com.example.newsservice.dto.comment.CreateCommentRequest;
@@ -9,7 +9,7 @@ import com.example.newsservice.model.Comment;
 import com.example.newsservice.repository.CommentRepository;
 import com.example.newsservice.repository.NewsRepository;
 import com.example.newsservice.repository.UserRepository;
-import com.example.newsservice.service.CommentService;
+import com.example.newsservice.security.PrincipalUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -39,9 +39,10 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         "comment.create.newsId", request.getNewsId()
                 )));
-        comment.setUser(userRepository.findById(request.getUserId())
+        Long userId = PrincipalUtils.getUserId();
+        comment.setUser(userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "comment.create.userId", request.getNewsId()
+                        "comment.create.userId", userId
                 )));
         return commentMapper.commentToResponse(commentRepository.save(comment));
     }
